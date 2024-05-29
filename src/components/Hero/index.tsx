@@ -16,13 +16,14 @@ const Hero = () => {
                 data-wow-delay=".2s"
               >
                 <h1 className="mb-6 text-3xl font-bold leading-snug text-white sm:text-4xl sm:leading-snug lg:text-5xl lg:leading-[1.2]">
-                  Open-source SaaS Starter Kit and Boilerplate for Next.js
+                  A single line about XYZ.
                 </h1>
                 <p className="mx-auto mb-9 max-w-[600px] text-base font-medium text-white sm:text-lg sm:leading-[1.44]">
-                  Next.js SaaS Boilerplate and Starter Kit designed and built
-                  for SaaS startups. It comes with all necessary integrations,
-                  pages, and components you need to launch a feature-rich SaaS
-                  websites.
+                  A small paragraph about XYZ. Lorem ipsum dolor sit amet
+                  consectetur, adipisicing elit. Sequi iure exercitationem sunt
+                  quas ab minus quisquam molestiae distinctio deleniti eligendi
+                  dolorum quo repellat, saepe adipisci magnam deserunt eos
+                  possimus maxime facilis hic at corrupti inventore!
                 </p>
                 <ul className="mb-10 flex flex-wrap items-center justify-center gap-5">
                   <li>
@@ -30,7 +31,7 @@ const Hero = () => {
                       href="https://nextjstemplates.com/templates/play"
                       className="inline-flex items-center justify-center rounded-md bg-white px-7 py-[14px] text-center text-base font-medium text-dark shadow-1 transition duration-300 ease-in-out hover:bg-gray-2"
                     >
-                      Download Now
+                      Sign Up Now
                     </Link>
                   </li>
                   <li>
@@ -63,7 +64,7 @@ const Hero = () => {
 
                 <div>
                   <p className="mb-4 text-center text-base font-medium text-white/60">
-                    Play is now available for all popular frameworks
+                    XYZ is now available for all popular platforms
                   </p>
                   <div
                     className="wow fadeInUp flex items-center justify-center gap-4 text-center"
