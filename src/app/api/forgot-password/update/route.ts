@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
-import { prisma } from "@/utils/prismaDB";
+import mongoose from "mongoose";
+import { User } from "@/models/User";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
@@ -12,11 +13,10 @@ export async function POST(request: Request) {
 
 	const formatedEmail = email.toLowerCase();
 
-	const user = await prisma.user.findUnique({
-		where: {
-			email: formatedEmail,
-		},
-	});
+	await mongoose.connect(process.env.MONGO_URI);
+
+		const user = await User.findOne({ email: formatedEmail });
+
 
 	if (!user) {
 		throw new Error("Email does not exists");
@@ -25,16 +25,14 @@ export async function POST(request: Request) {
 	const hashedPassword = await bcrypt.hash(password, 10);
 
 	try {
-		await prisma.user.update({
-			where: {
-				email: formatedEmail,
-			},
-			data: {
+		await User.updateOne(
+			{ email: formatedEmail },
+			{
 				password: hashedPassword,
 				passwordResetToken: null,
 				passwordResetTokenExp: null,
-			},
-		});
+			}
+		);
 
 		return NextResponse.json("Password Updated", { status: 200 });
 	} catch (error) {

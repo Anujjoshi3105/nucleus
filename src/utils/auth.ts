@@ -1,19 +1,22 @@
 import bcrypt from "bcrypt";
 import { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GitHubProvider from "next-auth/providers/github";
 import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
-import { PrismaAdapter } from "@auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
-import { prisma } from "./prismaDB";
 import type { Adapter } from "next-auth/adapters";
+import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
+import {User} from '@/models/User'
+import clientPromise from '@/app/lib/db'
+import mongoose from "mongoose";
+
 
 export const authOptions: NextAuthOptions = {
   pages: {
     signIn: "/auth/signin",
   },
-  adapter: PrismaAdapter(prisma) as Adapter,
+  adapter: MongoDBAdapter(clientPromise),
   secret: process.env.SECRET,
   session: {
     strategy: "jwt",
@@ -34,12 +37,11 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Please enter an email or password");
         }
 
+
+        await mongoose.connect(process.env.MONGO_URI);
+
         // check to see if user already exist
-        const user = await prisma.user.findUnique({
-          where: {
-            email: credentials.email,
-          },
-        });
+        const user = await User.findOne({ email: credentials.email });
 
         // if user was not found
         if (!user || !user?.password) {

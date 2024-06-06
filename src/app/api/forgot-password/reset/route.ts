@@ -1,4 +1,5 @@
-import { prisma } from "@/utils/prismaDB";
+import mongoose from "mongoose";
+import { User } from "@/models/User";
 import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { sendEmail } from "@/utils/email";
@@ -13,11 +14,8 @@ export async function POST(request: Request) {
 
 	const formatedEmail = email.toLowerCase();
 
-	const user = await prisma.user.findUnique({
-		where: {
-			email: formatedEmail,
-		},
-	});
+	await mongoose.connect(process.env.MONGO_URI);
+		const user = await User.findOne({ email: formatedEmail });
 
 	if (!user) {
 		return new NextResponse("User doesn't exist", { status: 400 });
@@ -28,15 +26,14 @@ export async function POST(request: Request) {
 	const passwordResetTokenExp = new Date();
 	passwordResetTokenExp.setMinutes(passwordResetTokenExp.getMinutes() + 10);
 
-	await prisma.user.update({
-		where: {
-			email: formatedEmail,
-		},
-		data: {
+	await User.updateOne(
+		{ email: formatedEmail },
+		{
 			passwordResetToken: resetToken,
 			passwordResetTokenExp,
-		},
-	});
+		}
+	);
+
 
 	const resetURL = `${process.env.SITE_URL}/reset-password/${resetToken}`;
 

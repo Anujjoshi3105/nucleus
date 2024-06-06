@@ -1,4 +1,5 @@
-import { prisma } from "@/utils/prismaDB";
+import mongoose from "mongoose";
+import { User } from "@/models/User";
 import { NextResponse } from "next/server";
 
 export const POST = async (request: Request) => {
@@ -9,13 +10,12 @@ export const POST = async (request: Request) => {
     return new NextResponse("Missing Fields", { status: 400 });
   }
 
-  const user = await prisma.user.findUnique({
-    where: {
-      passwordResetToken: token,
-      passwordResetTokenExp: {
-        gte: new Date(),
-      },
-    },
+
+  await mongoose.connect(process.env.MONGO_URI);
+  
+  const user = await User.findOne({
+    passwordResetToken: token,
+    passwordResetTokenExp: { $gte: new Date() },
   });
 
   if (!user) {
