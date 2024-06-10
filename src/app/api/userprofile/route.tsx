@@ -9,3 +9,5 @@ import UserProfile from '@/models/Profile'
     return Response.json(cretedprofile);
      
   }
+
+  

@@ -9,13 +9,13 @@ const menuData: Menu[] = [
   },
   {
     id: 2,
-    title: "About",
+    title: "Your Profile",
     path: "/about",
     newTab: false,
   },
   {
     id: 3,
-    title: "Contact",
+    title: "Profiles",
     path: "/contact",
     newTab: false,
   },
