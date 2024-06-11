@@ -49,13 +49,7 @@ const Profiles: React.FC = () => {
         {profiles.map(profile => (
           <div key={profile._id} className="bg-white rounded-lg shadow-md p-4">
             <div className="flex items-center justify-center mb-4">
-              <Image
-                src="/xyzavatar.jpeg" // Replace with dynamic URL if available
-                alt={profile.name}
-                width={100}
-                height={100}
-                className="rounded-full"
-              />
+            <Image className='rounded-lg ring-blue-900 p-2' src="/xyzavatar.jpeg" width={300} height={300} alt='avatar' />
             </div>
             <h2 className="text-lg font-bold text-center">{profile.name}</h2>
             <p className="text-center text-gray-500">{profile.college}</p>
@@ -69,7 +63,7 @@ const Profiles: React.FC = () => {
               </ul>
             </div>
             <div className="flex justify-around mt-4">
-              <Link href={`/profile/${profile._id}`}>
+              <Link href={`/contact/${profile._id}`}>
                 <button className="text-indigo-600">View Profile</button>
               </Link>
               <button
