@@ -1,15 +1,24 @@
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
 import mongoose from "mongoose";
-import { User } from '@/models/User';
+import { User } from "@/models/User";
 
 export async function POST(request: any) {
   const body = await request.json();
   const { name, email, password } = body;
 
+  // Ensure MONGO_URI is defined
+  const mongoUri = process.env.MONGO_URI;
+  if (!mongoUri) {
+    return NextResponse.json(
+      "MONGO_URI is not defined in environment variables",
+      { status: 500 }
+    );
+  }
+
   // Connect to MongoDB
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(mongoUri);
 
     // Validation: Check for missing fields
     if (!name || !email || !password) {
@@ -36,7 +45,5 @@ export async function POST(request: any) {
   } catch (error) {
     console.error("Error:", error);
     return NextResponse.json("Internal Server Error", { status: 500 });
-  } 
+  }
 }
-
-
