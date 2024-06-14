@@ -8,10 +8,7 @@ import Notification from '@/models/Notification';
 
    await mongoose.connect(process.env.MONGO_URI);
 
-   console.log('Connecting to the database');
-   console.log(`Sender ID: ${senderId}`);
-   console.log(`Receiver ID: ${receiverId}`);
-
+   
    const senderProfile = await Profile.findOne({ user: senderId });
       const receiverProfile = await Profile.findOne({ user: receiverId });
 
