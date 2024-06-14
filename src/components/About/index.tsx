@@ -28,7 +28,8 @@ const About: React.FC = () => {
     achievements: [''],
     links: [{ url: '', title: '', description: '', image: '' }],
     useremail: '',
-    user: ''
+    user: '',
+    friends: [] 
   });
 
   const fetchUserProfile = async (email: string) => {
@@ -231,7 +232,7 @@ const About: React.FC = () => {
                   type="text"
                   value={item}
                   onChange={(e) => handleArrayInputChange(key, index, e.target.value)}
-                  required
+                  
                   className="w-full px-3 py-2 text-white-500 bg-transparent outline-none border focus:border-indigo-600 shadow-sm rounded-lg"
                 />
                 <button

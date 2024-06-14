@@ -1,5 +1,5 @@
 import mongoose, { Document, Schema } from 'mongoose';
-import {User} from '@/models/User'
+import { User } from '@/models/User';
 
 export interface UserProfile extends Document {
   name: string;
@@ -12,21 +12,23 @@ export interface UserProfile extends Document {
   achievements: string[];
   links: string[];
   useremail: string;
-  user: Schema.Types.ObjectId; 
+  user: Schema.Types.ObjectId;
+  friends: Schema.Types.ObjectId[];
 }
 
 const userProfileSchema = new Schema<UserProfile>({
   name: { type: String, required: true },
   college: { type: String, required: true },
   about: { type: String, required: true },
-  skills: [{ type: String, required: true }],
-  experience: [{ type: String, required: true }],
-  education: [{ type: String, required: true }],
-  certificates: [{ type: String, required: true }],
-  achievements: [{ type: String, required: true }],
-  links: [{ type: String, required: true }],
-  useremail: { type: String, ref: 'User', required: true }, // Reference to the user by email
-  user: { type: Schema.Types.ObjectId, ref: 'User', required: true }, // Reference to the user
+  skills: [{ type: String }],
+  experience: [{ type: String }],
+  education: [{ type: String}],
+  certificates: [{ type: String }],
+  achievements: [{ type: String }],
+  links: [{ type: String}],
+  useremail: { type: String, ref: 'User', required: true, unique: true }, // Unique reference to the user by email
+  user: { type: Schema.Types.ObjectId, ref: 'User', required: true, unique: true }, // Unique reference to the user
+  friends: [{ type: Schema.Types.ObjectId, ref: 'User' }] // Removed unique constraint
 });
 
 // Create and export the model
