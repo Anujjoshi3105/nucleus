@@ -22,10 +22,10 @@ export default function Home() {
       <ScrollUp />
       <Hero />
       <Features />
-      <About />
+      
       <CallToAction />
       <Faq />
-      <Contact />
+     
     </main>
   );
 }

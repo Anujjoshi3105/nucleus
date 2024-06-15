@@ -32,9 +32,9 @@ const About: React.FC = () => {
     friends: [] 
   });
 
-  const fetchUserProfile = async (email: string) => {
+  const fetchUserProfile = async (id: string) => {
     try {
-      const response = await fetch(`/api/userprofile/${email}`);
+      const response = await fetch(`/api/userprofile/${id}`);
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
@@ -44,6 +44,7 @@ const About: React.FC = () => {
       console.error('Error fetching user profile:', error);
     }
   };
+  
 
   useEffect(() => {
     if (status === 'authenticated' && session?.user) {
@@ -52,7 +53,7 @@ const About: React.FC = () => {
         user: session.user?.id,
         useremail: session.user?.email
       }));
-      fetchUserProfile(session.user.email);
+      fetchUserProfile(session?.user.id);
     } else if (status === 'unauthenticated') {
       router.push('/signin');
     }
