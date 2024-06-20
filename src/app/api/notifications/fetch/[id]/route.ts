@@ -8,7 +8,10 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 
     await mongoose.connect(process.env.MONGO_URI);
 
-    const notification = await Notification.find({ receiverId: id }).sort({ createdAt: -1 });
+    const notification = await Notification.find({ receiverId: id })
+    .sort({ createdAt: -1 })
+    .populate('senderId', 'name') 
+    .exec();
 
     
     return new Response(JSON.stringify(notification), { status: 200 });

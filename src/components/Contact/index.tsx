@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 
 interface Profile {
   _id: string;
@@ -23,9 +24,12 @@ const Profiles: React.FC = () => {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [message, setMessage] = useState<string>('');
 
+
  
   useEffect(() => {
+    
     const fetchProfiles = async () => {
+    
       try {
         const response = await fetch('/api/profiles');
         const data = await response.json();

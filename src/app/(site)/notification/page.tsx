@@ -9,7 +9,10 @@ interface Notification {
   receiverId: string;
   senderId: string;
   message: string;
+  status: string;
   createdAt: string;
+  acceptedAt?: string;
+
 }
 
 const NotificationPage = () => {
@@ -28,7 +31,7 @@ const NotificationPage = () => {
 
   const fetchNotifications = async () => {
     try {
-      const response = await fetch(`/api/notifications/${session?.user.id}`);
+      const response = await fetch(`/api/notifications/fetch/${session?.user.id}`);
       if (response.ok) {
         const data: Notification[] = await response.json();
         console.log('Fetched notifications:', data); // Log fetched data
@@ -46,6 +49,8 @@ const NotificationPage = () => {
     }
   };
 
+
+
   const handleDeleteNotification = async (id: string) => {
     try {
       const response = await fetch(`/api/notifications/${id}`, {
@@ -61,10 +66,15 @@ const NotificationPage = () => {
       console.error('Error deleting notification:', error);
     }
   };
+
+
   const handleAccept = async (notificationId: string) => {
     try {
-      const response = await fetch(`/api/notifications/${notificationId}/accept`, {
-        method: 'POST',
+      const response = await fetch(`/api/notifications/accepts`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ notificationId }), 
+
       });
       if (response.ok) {
         // Update UI to remove accepted notification
@@ -76,6 +86,8 @@ const NotificationPage = () => {
       console.error('Error accepting notification:', error);
     }
   };
+
+
 
   const handleDeny = async (notificationId: string) => {
     try {
@@ -98,34 +110,62 @@ const NotificationPage = () => {
 
   return (
     <div className="container mx-auto p-4 mt-32 mb-80">
-     <h1 className="text-2xl font-bold mb-4">Notifications</h1>
+      <h1 className="text-2xl font-bold mb-4">Notifications</h1>
       {notifications.length === 0 ? (
         <p>No notifications found</p>
       ) : (
         <ul>
           {notifications.map(notification => (
-            <li key={notification._id} className="mb-4 p-4 bg-gray-100 dark:bg-gray-800 rounded shadow flex justify-between items-center">
+            <li 
+              key={notification._id} 
+              className="mb-4 p-4 bg-gray-100 dark:bg-gray-800 rounded shadow flex justify-between items-center"
+              onClick={() => handleNotificationClick(notification.senderId)}
+              style={{ cursor: 'pointer' }}
+            >
               <span className="text-black dark:text-white">{notification.message}</span>
-              <div className="flex space-x-2">
-                <button
-                  className="px-4 py-2 bg-green-500 text-white rounded"
-                  onClick={() => handleAccept(notification._id)}
-                >
-                  Accept
-                </button>
-                <button
-                  className="px-4 py-2 bg-red-500 text-white rounded"
-                  onClick={() => handleDeny(notification._id)}
-                >
-                  Deny
-                </button>
-              </div>
+              {notification.status === 'pending' ? (
+                <div className="flex space-x-2">
+                  <button
+                    className="px-4 py-2 bg-green-500 text-white rounded"
+                    onClick={(e) => { e.stopPropagation(); handleAccept(notification._id); }}
+                  >
+                    Accept
+                  </button>
+                  <button
+                    className="px-4 py-2 bg-red-500 text-white rounded"
+                    onClick={(e) => { e.stopPropagation(); handleDeny(notification._id); }}
+                  >
+                    Deny
+                  </button>
+                </div>
+              ) : (
+                <span className="text-green-500">Accepted {notification.acceptedAt ? formatAcceptanceTime(new Date(notification.acceptedAt)) : 'just now'}</span>
+              )}
             </li>
           ))}
         </ul>
       )}
     </div>
   );
+  function formatAcceptanceTime(acceptedAt: Date): string {
+    const now = new Date();
+    const diffMilliseconds = now.getTime() - acceptedAt.getTime();
+    const diffSeconds = Math.floor(diffMilliseconds / 1000);
+    const diffMinutes = Math.floor(diffSeconds / 60);
+    const diffHours = Math.floor(diffMinutes / 60);
+    const diffDays = Math.floor(diffHours / 24);
+  
+    if (diffDays > 0) {
+      return `${diffDays} day${diffDays === 1 ? '' : 's'} ago`;
+    } else if (diffHours > 0) {
+      return `${diffHours} hour${diffHours === 1 ? '' : 's'} ago`;
+    } else if (diffMinutes > 0) {
+      return `${diffMinutes} minute${diffMinutes === 1 ? '' : 's'} ago`;
+    } else {
+      return `just now`;
+    }
+  }
+  
 };
 
 export default NotificationPage;

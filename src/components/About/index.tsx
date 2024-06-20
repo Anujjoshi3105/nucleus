@@ -27,33 +27,60 @@ const About: React.FC = () => {
     certificates: [''],
     achievements: [''],
     links: [{ url: '', title: '', description: '', image: '' }],
-    useremail: '',
-    user: '',
+    useremail: session?.user?.email || '',
+    user: session?.user?.id || '',
     friends: [] 
   });
 
-  const fetchUserProfile = async (id: string) => {
+ 
+
+  const fetchUserProfile = async (id: string, session: any) => {
     try {
       const response = await fetch(`/api/userprofile/${id}`);
       if (!response.ok) {
         throw new Error(`Error: ${response.statusText}`);
       }
       const profile = await response.json();
-      setUserProfile(profile);
+      if (profile) {
+        setUserProfile(profile);
+      } else {
+        setUserProfile({
+          name: '',
+          college: '',
+          about: '',
+          skills: [''],
+          experience: [''],
+          education: [''],
+          certificates: [''],
+          achievements: [''],
+          links: [{ url: '', title: '', description: '', image: '' }],
+          useremail: session?.user?.email || '',
+          user: session?.user?.id || '',
+          friends: []
+        });
+      }
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
   };
   
+  console.log('Session status:', status); // Log session status
+    console.log('Session data:', session);  // Log session data
+    
 
   useEffect(() => {
+
+    
     if (status === 'authenticated' && session?.user) {
+
+ 
+
       setUserProfile(prevProfile => ({
         ...prevProfile,
         user: session.user?.id,
         useremail: session.user?.email
       }));
-      fetchUserProfile(session?.user.id);
+      fetchUserProfile(session?.user.id,session);
     } else if (status === 'unauthenticated') {
       router.push('/signin');
     }
@@ -322,3 +349,7 @@ const About: React.FC = () => {
 };
 
 export default About;
+
+
+
+

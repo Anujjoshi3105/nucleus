@@ -34,7 +34,7 @@ export default function RootLayout({
         {loading ? (
           <PreLoader />
         ) : (
-          <SessionProvider>
+          <SessionProvider  >
             <ThemeProvider
               attribute="class"
               enableSystem={false}
