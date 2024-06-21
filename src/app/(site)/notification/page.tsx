@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
+import Popup from '@/components/Popup';
 
 interface Notification {
   _id: string;
@@ -19,6 +20,7 @@ const NotificationPage = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [popupMessage, setPopupMessage] = useState<string | null>(null);
 
   useEffect(() => {
     if (status === 'loading') return;
@@ -67,6 +69,10 @@ const NotificationPage = () => {
     }
   };
 
+  const showPopup = (message: string) => {
+    setPopupMessage(message);
+  };
+
 
   const handleAccept = async (notificationId: string) => {
     try {
@@ -80,7 +86,15 @@ const NotificationPage = () => {
 
 
       if (response.ok) {
-        // Update UI to remove accepted notification
+
+        setNotifications(notifications.map(notification => 
+          notification._id === notificationId
+            ? { ...notification, status: 'accepted' }
+            : notification
+        ));
+
+        setPopupMessage('Connection accepted successfully');
+        
         
       } else {
         console.error('Error accepting notification');
@@ -107,6 +121,11 @@ const NotificationPage = () => {
       console.error('Error denying notification:', error);
     }
   };
+
+  const handleClosePopup = () => {
+    setPopupMessage(null);
+  };
+
 
   if (!session) return <div>Loading...</div>;
 
@@ -142,12 +161,23 @@ const NotificationPage = () => {
                   </button>
                 </div>
               ) : (
-                <span className="text-green-500">Accepted {notification.acceptedAt ? formatAcceptanceTime(new Date(notification.acceptedAt)) : 'just now'}</span>
+                <>
+                <span className="text-green-500">
+                  Accepted {notification.acceptedAt ? formatAcceptanceTime(new Date(notification.acceptedAt)) : 'just now'}
+                </span>
+                <button
+                  className="px-4 py-2 bg-red-500 text-white rounded"
+                  onClick={(e) => { e.stopPropagation(); handleDeny(notification._id); }}
+                >
+                  Deny
+                </button>
+              </>
               )}
             </li>
           ))}
         </ul>
       )}
+       {popupMessage && <Popup message={popupMessage} onClose={handleClosePopup} />}
     </div>
   );
   function formatAcceptanceTime(acceptedAt: Date): string {

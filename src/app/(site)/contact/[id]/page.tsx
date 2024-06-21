@@ -19,6 +19,7 @@ interface Profile {
   links: string[];
   useremail: string;
   user: string;
+  friends: string[];
 }
 
 interface Metadata {
@@ -34,6 +35,7 @@ const ProfileDetail: React.FC = () => {
   const [linkMetadata, setLinkMetadata] = useState<Metadata[]>([]);
   const { data: session, status } = useSession();
   const router = useRouter();
+  const [connectionStatus, setConnectionStatus] = useState<'connect' | 'pending' | 'connected'>('connect');
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -42,6 +44,9 @@ const ProfileDetail: React.FC = () => {
         if (response.ok) {
           const data = await response.json();
           setProfile(data);
+          if (data.friends.includes(session?.user?.id)) {
+            setConnectionStatus('connected');
+          }
         } else {
           throw new Error('Failed to fetch profile');
         }
@@ -100,6 +105,8 @@ const ProfileDetail: React.FC = () => {
       if (response.ok) {
         const data = await response.json();
         console.log(data.notificationMessage);
+        setConnectionStatus('pending');
+
       } else {
         const errorData = await response.json();
         console.error("Error sending notification:", errorData.message);
@@ -121,11 +128,30 @@ const ProfileDetail: React.FC = () => {
           <h1 className="text-3xl font-bold mb-2 text-gray-800 dark:text-gray-100">{profile.name}</h1>
           <p className="text-gray-600 dark:text-gray-300 mb-2"><strong>College:</strong> {profile.college}</p>
           <p className="text-gray-600 dark:text-gray-300 mb-2"><strong>About:</strong> {profile.about}</p>
-          <button className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
-            onClick={handleConnect}
-          >
-            Connect
-          </button>
+          {connectionStatus === 'connect' && (
+            <button
+              className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg shadow hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-opacity-75"
+              onClick={handleConnect}
+            >
+              Connect
+            </button>
+          )}
+          {connectionStatus === 'pending' && (
+            <button
+              className="mt-4 px-4 py-2 bg-yellow-500 text-white rounded-lg shadow"
+              disabled
+            >
+              Pending
+            </button>
+          )}
+          {connectionStatus === 'connected' && (
+            <button
+              className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg shadow"
+              disabled
+            >
+              Connected
+            </button>
+          )}
         </div>
         <div className="grid grid-cols-1 gap-6 w-full">
           <Section title="Education" items={profile.education} />
