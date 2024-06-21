@@ -71,14 +71,17 @@ const NotificationPage = () => {
   const handleAccept = async (notificationId: string) => {
     try {
       const response = await fetch(`/api/notifications/accepts`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ notificationId }), 
-
+        method: 'POST',
+         headers: {
+       'Content-Type': 'application/json',
+  },
+         body: JSON.stringify({notificationId}),
       });
+
+
       if (response.ok) {
         // Update UI to remove accepted notification
-        setNotifications(notifications.filter(n => n._id !== notificationId));
+        
       } else {
         console.error('Error accepting notification');
       }
