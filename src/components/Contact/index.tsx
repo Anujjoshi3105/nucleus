@@ -21,6 +21,7 @@ interface Profile {
 }
 
 const Profiles: React.FC = () => {
+  const { data: session } = useSession();
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [message, setMessage] = useState<string>('');
 
@@ -43,41 +44,30 @@ const Profiles: React.FC = () => {
     fetchProfiles();
   }, []);
 
+  useEffect(() => {
+    if (session?.user) {
+      console.log(session);
+      setProfiles(prevProfiles => prevProfiles.filter(profile => profile.user !== session?.user?.id));
+    }
+  }, [session]);
 
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4 text-center">User Profiles</h1>
-      {message && <p className="text-red-500">{message}</p>}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+    <div className="container mx-auto p-6 bg-gradient-to-r from-gray-800 to-gray-900 rounded-lg shadow-lg text-white">
+      <h1 className="text-4xl font-bold mb-8 text-center">User Profiles</h1>
+      {message && <p className="text-red-500 text-center">{message}</p>}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
         {profiles.map(profile => (
-          <div key={profile._id} className="bg-white rounded-lg shadow-md p-4">
-            <div className="flex items-center justify-center mb-4">
-            <Image className='rounded-lg ring-blue-900 p-2' src="/xyzavatar.jpeg" width={300} height={300} alt='avatar' />
+          <Link href={`/contact/${profile._id}`} key={profile._id}>
+            <div className="bg-gray-700 rounded-lg shadow-md p-6 cursor-pointer transition-transform transform hover:translate-y-[-10px] hover:shadow-xl">
+              <div className="flex items-center justify-center mb-6">
+              <Image className='rounded-full ring-blue-900 p-2' src="/xyzavatar.jpeg" width={300} height={300} alt='avatar' />
+              </div>
+              <h2 className="text-lg font-bold text-center text-gray-200">{profile.name}</h2>
+              <p className="text-center text-gray-400">{profile.college}</p>
+              <p className="mt-4 text-gray-300 text-justify">{profile.about}</p>
             </div>
-            <h2 className="text-lg font-bold text-center">{profile.name}</h2>
-            <p className="text-center text-gray-500">{profile.college}</p>
-            <p className="mt-2">{profile.about}</p>
-            <div className="mt-2">
-              <h3 className="font-semibold">Education</h3>
-              <ul className="list-disc list-inside">
-                {profile.education.map((edu, index) => (
-                  <li key={index}>{edu}</li>
-                ))}
-              </ul>
-            </div>
-            <div className="flex justify-around mt-4">
-              <Link href={`/contact/${profile._id}`}>
-                <button className="text-indigo-600">View Profile</button>
-              </Link>
-              <button
-                onClick={() => alert(`Connect with ${profile.name}`)}
-                className="text-blue-600"
-              >
-                Connect
-              </button>
-            </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>
