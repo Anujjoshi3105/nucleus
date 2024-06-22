@@ -7,22 +7,23 @@ const menuData: Menu[] = [
     path: "/",
     newTab: false,
   },
+  
   {
     id: 2,
-    title: "Your Profile",
-    path: "/about",
-    newTab: false,
-  },
-  {
-    id: 3,
     title: "Profiles",
     path: "/contact",
     newTab: false,
   },
   {
+    id: 3,
+    title: "Chat",
+    path: "/chats",
+    newTab: false,
+  },
+  {
     id: 4,
-    title: "Notification",
-    path: "/notification",
+    title: "Friends",
+    path: "/friends",
     newTab: false,
   },
 ];

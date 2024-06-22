@@ -5,10 +5,15 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
+import Badge from '@mui/material/Badge';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+
+
 
 import menuData from "./menuData";
 
 const Header = () => {
+  const [notificationCount, setNotificationCount] = useState(0);
   const { data: session } = useSession();
 
   const pathUrl = usePathname();
@@ -30,6 +35,27 @@ const Header = () => {
   useEffect(() => {
     window.addEventListener("scroll", handleStickyNavbar);
   });
+
+  useEffect(() => {
+    if (session?.user?.id) {
+      fetchNotificationCount(session.user.id);
+    }
+  }, [session?.user?.id]);
+
+
+  const fetchNotificationCount = async (id:string) => {
+    try {
+      const response = await fetch(`/api/notification/count/${id}`);
+      if (response.ok) {
+        const data = await response.json();
+        setNotificationCount(data);
+      }else {
+        throw new Error('Failed to fetch notification count');
+      }
+    } catch (error) {
+      console.error('Error fetching notification count:', error);
+    }
+  };
 
   // submenu handler
   const [openIndex, setOpenIndex] = useState(-1);
@@ -138,6 +164,8 @@ const Header = () => {
                     }`}
                   />
                 </button>
+
+
                 <nav
                   id="navbarCollapse"
                   className={`navbar absolute right-0 z-30 w-[250px] rounded border-[.5px] border-body-color/50 bg-white px-6 py-4 duration-300 dark:border-body-color/20 dark:bg-dark-2 lg:visible lg:static lg:w-auto lg:border-none lg:!bg-transparent lg:p-0 lg:opacity-100 lg:dark:bg-transparent ${
@@ -285,30 +313,62 @@ const Header = () => {
                     </svg>
                   </span>
                 </button>
-
+                
+             
                 {session?.user ? (
                   <>
-                    <p
+                   <Link href="/about">
+                   
+                   <p
                       className={`loginBtn px-7 py-3 text-base font-medium ${
                         !sticky && pathUrl === "/" ? "text-white" : "text-dark"
                       }`}
                     >
                       {session?.user?.name}
                     </p>
+                   </Link>
+                    
                     {pathUrl !== "/" || sticky ? (
-                      <button
-                        onClick={() => signOut()}
-                        className="signUpBtn rounded-lg bg-primary bg-opacity-100 px-6 py-3 text-base font-medium text-white duration-300 ease-in-out hover:bg-opacity-20 hover:text-dark"
-                      >
-                        Sign Out
-                      </button>
+                       <>
+                       <button
+                         onClick={() => signOut()}
+                         className="signUpBtn rounded-lg bg-white bg-opacity-20 px-6 py-3 text-base font-medium text-white duration-300 ease-in-out hover:bg-opacity-100 hover:text-dark"
+                       >
+                         Sign Out
+                       </button>
+                       <Link href="/notification">
+                       <Badge badgeContent={notificationCount} color="error">
+                                 <NotificationsIcon />
+                                 {notificationCount > 0 && (
+                    <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full px-1 text-xs">
+                      {notificationCount}
+                    </span>
+                  )}
+                      </Badge>
+                      </Link>
+                       </>
+                      
                     ) : (
+
+                      <>
                       <button
                         onClick={() => signOut()}
                         className="signUpBtn rounded-lg bg-white bg-opacity-20 px-6 py-3 text-base font-medium text-white duration-300 ease-in-out hover:bg-opacity-100 hover:text-dark"
                       >
                         Sign Out
                       </button>
+                      <Link href="/notification">
+                       <Badge badgeContent={notificationCount} color="error">
+                                 <NotificationsIcon />
+                                 {notificationCount > 0 && (
+                    <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full px-1 text-xs">
+                      {notificationCount}
+                    </span>
+                  )}
+                      </Badge>
+                      </Link>
+                      </>
+                      
                     )}
                   </>
                 ) : (
