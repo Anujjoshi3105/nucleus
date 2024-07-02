@@ -4,12 +4,6 @@ import { getSession } from 'next-auth/react';
 
   export async function POST(req:any){
     
-    const session = await getSession({ req });
-
-    if (!session) {
-        return Response.json({ message: 'Unauthorized' });
-      }
-
       const {id} =await req.json();
 
       if (!id || typeof id !== 'string') {
@@ -18,7 +12,7 @@ import { getSession } from 'next-auth/react';
    
      await mongoose.connect(process.env.MONGO_URI);
 
-     const userProfile = await UserProfile.findById(id)
+     const userProfile = await UserProfile.findOne({ user: id });
      
      if (!userProfile) {
         return Response.json({ message: 'UserProfile not found' });
@@ -26,6 +20,11 @@ import { getSession } from 'next-auth/react';
   
       // Get the list of friends' IDs
       const friendsIds = userProfile.friends;
+
+      if (!Array.isArray(friendsIds)) {
+        return Response.json({ message: 'Friends is not an array' });
+      }
+  
   
       // Find the profiles of each friend using the IDs in the friends array
       const friendsProfiles = await UserProfile.find({ user: { $in: friendsIds } });
@@ -42,4 +41,3 @@ import { getSession } from 'next-auth/react';
   }
 
 
-  
