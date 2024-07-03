@@ -65,6 +65,7 @@ const FriendsList = () => {
           },
           body: JSON.stringify({
             userId: friendId, 
+            currentUserId: session?.user?.id 
           }),
         });
 
