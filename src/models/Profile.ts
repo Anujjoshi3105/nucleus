@@ -1,7 +1,7 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import { User } from '@/models/User';
 import { Account } from '@/models/User';
-import Conversation from '@/models/Converstion';
+import Conversation from '@/models/Conversation';
 import Message from '@/models/Message';
 
 export interface UserProfile extends Document {

@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
-import UserProfile from '@/models/Profile'
-import { getCurrentUser } from '@/app/lib/auth';
-import Converstion from '@/models/Converstion';
+import UserProfile from '@/models/Profile';
+import Conversation from '@/models/Conversation'
+
 
   export async function POST(req:any){
 
@@ -32,7 +32,7 @@ import Converstion from '@/models/Converstion';
         const newConversation = new Conversation({
           name,
           isGroup,
-          users: [...members.map((member: { value: string }) => member.value), currentUserId]
+          userIds: [...members.map((member: { value: string }) => member.value), currentUserId]
         });
     
         await newConversation.save();
@@ -41,21 +41,22 @@ import Converstion from '@/models/Converstion';
 
       }
 
-      const existingConversations = await Conversation.find({
+      const existingConversation = await Conversation.findOne({
         $or: [
-          { users: { $all: [currentUserId, userId] } },
-          { users: { $all: [userId, currentUserId] } }
+          { userIds: { $all: [currentUserId, userId] } },
+          { userIds: { $all: [userId, currentUserId] } }
         ]
       });
 
-      const singleConversation =existingConversations[0];
 
-      if(singleConversation){
-        return Response.json(singleConversation);
+      // const singleConversation =existingConversations[0];
+
+      if(existingConversation){
+        return Response.json(existingConversation);
       }
 
       const newConversation = new Conversation({
-        users: [currentUserId, userId]
+        userIds: [currentUserId, userId],
       });
     
       await newConversation.save();

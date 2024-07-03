@@ -1,6 +1,6 @@
 import mongoose, { Schema, Document } from 'mongoose';
 import { User } from '@/models/User'; 
-import Converstion from '@/models/Converstion'; 
+import Converstion from '@/models/Conversation'; 
 
 export interface IMessage extends Document {
   body?: string;

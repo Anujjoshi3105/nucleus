@@ -64,11 +64,13 @@ const FriendsList = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            userId: friendId, 
+            userId: friendId,
             currentUserId: session?.user?.id 
           }),
         });
 
+        console.log('API call made to /api/conversations');
+        
         if (!response.ok) {
           throw new Error('Failed to start conversation');
         }
@@ -76,7 +78,6 @@ const FriendsList = () => {
         const data = await response.json();
         console.log('Conversation started with data:', data);
         router.push(`/conversations/${data.id}`);
-
       } catch (error) {
         console.error('Error starting conversation:', error);
         setError('Error starting conversation');
@@ -84,7 +85,7 @@ const FriendsList = () => {
         setLoading(false);
       }
     },
-    [router]
+    [router, session]
   );
 
   if (loading) return <div>Loading...</div>;
@@ -96,7 +97,7 @@ const FriendsList = () => {
         {friends.map((friend) => (
           <li
             key={friend.id}
-            onClick={() => handleClick(friend.id)} // Pass friend.id to handleClick
+            onClick={() => handleClick(friend.id)}
             className='w-full relative flex items-center space-x-3 bg-white p-3 hover:bg-neutral-100 rounded-lg transition cursor-pointer'
           >
             <Avatara />
