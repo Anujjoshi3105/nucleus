@@ -1,5 +1,8 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import { User } from '@/models/User';
+import { Account } from '@/models/User';
+import Conversation from '@/models/Converstion';
+import Message from '@/models/Message';
 
 export interface UserProfile extends Document {
   name: string;
@@ -14,6 +17,13 @@ export interface UserProfile extends Document {
   useremail: string;
   user: Schema.Types.ObjectId;
   friends: Schema.Types.ObjectId[];
+
+  conversationIds: Schema.Types.ObjectId[];
+  seenMessageIds: Schema.Types.ObjectId[];
+  accounts:Schema.Types.ObjectId[];
+  messages: Schema.Types.ObjectId[];
+
+  
 }
 
 const userProfileSchema = new Schema<UserProfile>({
@@ -26,9 +36,16 @@ const userProfileSchema = new Schema<UserProfile>({
   certificates: [{ type: String }],
   achievements: [{ type: String }],
   links: [{ type: String}],
-  useremail: { type: String, ref: 'User', required: true, unique: true }, // Unique reference to the user by email
-  user: { type: Schema.Types.ObjectId, ref: 'User', required: true, unique: true }, // Unique reference to the user
-  friends: [{ type: Schema.Types.ObjectId, ref: 'User' }] // Removed unique constraint
+  useremail: { type: String, ref: 'User', required: true, unique: true }, 
+  user: { type: Schema.Types.ObjectId, ref: 'User', required: true, unique: true }, 
+  friends: [{ type: Schema.Types.ObjectId, ref: 'User' }], 
+
+  conversationIds: [{ type: Schema.Types.ObjectId, ref: 'Conversation' }],
+  seenMessageIds: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
+  accounts: [{ type: Schema.Types.ObjectId, ref: 'Account' }],
+  messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }]
+ 
+
 });
 
 // Create and export the model
