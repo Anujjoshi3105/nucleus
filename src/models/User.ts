@@ -1,5 +1,7 @@
 // mongooseSchema.ts
 import mongoose, { Document, Schema, model, Types, Model } from 'mongoose';
+import { IConversation } from './Conversation'; 
+import { IMessage } from './Message'; 
 
 // Interface for Account
 interface IAccount extends Document {
@@ -24,7 +26,7 @@ interface ISession extends Document {
 }
 
 // Interface for User
-interface IUser extends Document {
+export interface IUser extends Document {
   name?: string;
   email?: string;
   emailVerified?: Date;
@@ -34,6 +36,14 @@ interface IUser extends Document {
   passwordResetTokenExp?: Date;
   accounts: Types.Array<IAccount>;
   sessions: Types.Array<ISession>;
+  conversationIds: mongoose.Types.ObjectId[];
+  conversations: IConversation[];
+
+  seenMessageIds: mongoose.Types.ObjectId[];
+  seenMessages: IMessage[];
+  
+
+  messages: IMessage[];
 }
 
 // Interface for VerificationToken
@@ -84,7 +94,16 @@ const userSchema = new Schema<IUser>({
   image: { type: String },
   password: { type: String },
   passwordResetToken: { type: String, unique: true, sparse: true },
-  passwordResetTokenExp: { type: Date }
+  passwordResetTokenExp: { type: Date },
+  conversationIds: [{ type: Schema.Types.ObjectId, ref: 'Conversation' }],
+  conversations: [{ type: Schema.Types.ObjectId, ref: 'Conversation' }],
+
+  seenMessageIds: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
+  seenMessages: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
+
+
+
+  messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
 }, {
   timestamps: true,
   toJSON: { virtuals: true },
@@ -129,5 +148,6 @@ export {
   Account,
   Session,
   User,
-  VerificationToken
+  VerificationToken,
+   
 };

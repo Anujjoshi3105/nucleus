@@ -18,10 +18,7 @@ export interface UserProfile extends Document {
   user: Schema.Types.ObjectId;
   friends: Schema.Types.ObjectId[];
 
-  conversationIds: Schema.Types.ObjectId[];
-  seenMessageIds: Schema.Types.ObjectId[];
-  accounts:Schema.Types.ObjectId[];
-  messages: Schema.Types.ObjectId[];
+  
 
   
 }
@@ -40,10 +37,7 @@ const userProfileSchema = new Schema<UserProfile>({
   user: { type: Schema.Types.ObjectId, ref: 'User', required: true, unique: true }, 
   friends: [{ type: Schema.Types.ObjectId, ref: 'User' }], 
 
-  conversationIds: [{ type: Schema.Types.ObjectId, ref: 'Conversation' }],
-  seenMessageIds: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
-  accounts: [{ type: Schema.Types.ObjectId, ref: 'Account' }],
-  messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }]
+  
  
 
 });

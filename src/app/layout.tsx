@@ -43,7 +43,7 @@ export default function RootLayout({
               <ToasterContext />
               <Header />
               {children}
-              <Footer />
+              
               <ScrollToTop />
             </ThemeProvider>
           </SessionProvider>

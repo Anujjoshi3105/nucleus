@@ -53,23 +53,46 @@ const FriendsList = () => {
   }, [fetchFriends]);
 
   const handleClick = useCallback(
+
+   
     async (friendId: string) => {
       console.log('handleClick called with friendId:', friendId);
       setLoading(true);
+     
+    
 
       try {
+
+        const userIdFindResponse = await fetch('/api/userIdFind', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            friendId,  // Sending only the session ID
+          }),
+        });
+  
+        if (!userIdFindResponse.ok) {
+          throw new Error('Failed to find user ID');
+        }
+  
+        const userIdFindData = await userIdFindResponse.json();
+
+
+
         const response = await fetch('/api/conversations', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            userId: friendId,
+            userId: userIdFindData.userId,
             currentUserId: session?.user?.id 
           }),
         });
 
-        console.log('API call made to /api/conversations');
+    
         
         if (!response.ok) {
           throw new Error('Failed to start conversation');
