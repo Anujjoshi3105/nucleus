@@ -32,7 +32,7 @@ import { User } from '@/models/User';
             path: 'sender seen',
             model: User
         }
-    });
+    }).exec();
 
    return  Response.json({ conversations });
      
