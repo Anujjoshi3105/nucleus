@@ -22,7 +22,7 @@
     "bcrypt": "^5.0.1",
     "chart.js": "^4.4.3",
     "clsx": "^2.1.1",
-    "date-fns": "^3.4.0",
+    "date-fns": "^3.6.0",
     "gray-matter": "^4.0.3",
     "metadata-scraper": "^0.2.61",
     "metascraper": "^5.45.10",

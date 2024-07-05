@@ -11,14 +11,14 @@ import { User } from '@/models/User';
     await mongoose.connect(process.env.MONGO_URI);
 
    
-    const {id} =await req.json();
+    const { sessionId } =await req.json();
 
-    if (!id) {
+    if (!sessionId) {
         return Response.json( 'User ID is required' );
     }
    
     const conversations = await Conversation.find({
-        userIds: id
+        userIds: sessionId
     })
     .sort({ lastMessageAt: 'desc' })
     .populate({
