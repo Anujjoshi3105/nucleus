@@ -91,8 +91,8 @@ const ConversationId: React.FC<{ params: IParams }> = ({ params }) => {
     <div className='lg:pl-80 h-full'>
       <div className='h-full flex flex-col'>
         <ConversationHeader conversation={conversation} />
-       <CompoBody/>
-       <CompoForm/>
+       <CompoBody initialMessages= {messages} />
+       <CompoForm />
       </div>
     </div>
   );

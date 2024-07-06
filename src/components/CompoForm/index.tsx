@@ -93,7 +93,7 @@ const CompoForm = () => {
       <CldUploadButton
         options={{ maxFiles: 1 }}
         onUpload={handleUpload}
-        uploadPreset='bmmh0kv'
+        uploadPreset="h7nqrx7j"
       >
         <HiPhoto size={30} className='text-sky-500' />
       </CldUploadButton>
