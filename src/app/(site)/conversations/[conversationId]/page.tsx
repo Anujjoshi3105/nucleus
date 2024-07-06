@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import EmptyState from '@/components/EmptyState';
 import ConversationHeader from '@/components/ConversationHeader';
-
+import CompoBody from '@/components/CompoBody';
+import CompoForm from '@/components/CompoForm';
 interface IParams {
   conversationId: string;
 }
@@ -90,7 +91,8 @@ const ConversationId: React.FC<{ params: IParams }> = ({ params }) => {
     <div className='lg:pl-80 h-full'>
       <div className='h-full flex flex-col'>
         <ConversationHeader conversation={conversation} />
-        {/* Render your messages component here */}
+       <CompoBody/>
+       <CompoForm/>
       </div>
     </div>
   );
