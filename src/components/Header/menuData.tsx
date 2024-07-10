@@ -17,7 +17,7 @@ const menuData: Menu[] = [
   {
     id: 3,
     title: "Chat",
-    path: "/chats",
+    path: "/conversations",
     newTab: false,
   },
   {

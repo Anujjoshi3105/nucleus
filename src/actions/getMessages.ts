@@ -1,20 +1,22 @@
 import mongoose from 'mongoose';
-import Message, { IMessage } from '@/models/Message'; // Adjust import path as needed
-import { IUser } from '@/models/User'; // Adjust import path as needed
+import Message from '@/models/Message';
 
-const getMessages = async (conversationId: string): Promise<IMessage[]> => {
+const getMessages = async (conversationId) => {
   try {
-    const messages = await Message.find({
-      conversationId: new mongoose.Types.ObjectId(conversationId)
-    })
-    .populate('sender', 'name') // Populate sender field with user's name
-    .populate('seen', 'name')  // Populate seen field with user's name
-    .exec(); // Execute the query
+    await mongoose.connect(process.env.MONGO_URI);
+
+    const messages = await Message.find({ conversationId: conversationId })
+      .sort({ createdAt: 'asc' })
+      .populate('sender', 'name')
+      .populate('seen', 'name')
+      .exec();
 
     return messages;
   } catch (error) {
-    console.error("Error fetching messages:", error);
+    console.error('Error fetching messages:', error);
     return [];
+  } finally {
+    mongoose.connection.close();
   }
 };
 

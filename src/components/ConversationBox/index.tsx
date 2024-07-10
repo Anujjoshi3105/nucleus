@@ -47,7 +47,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
 
     if (session?.user?.id) {
       fetchOtherUserName();
-    }
+    } 
     
   }, [data._id, session?.user?.id]);
 
@@ -59,6 +59,9 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
     const messages = data.messages || [];
     return messages[messages.length - 1];
   }, [data.messages]);
+
+  console.log(data.messages);
+
 
   const userEmail = useMemo(() => {
     return session?.user?.email;
