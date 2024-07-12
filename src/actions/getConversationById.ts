@@ -1,30 +1,19 @@
 import mongoose from 'mongoose';
 import Conversation from '@/models/Conversation';
-import UserProfile from '@/models/Profile'; // Assuming you have a Profile model
-import getCurrentUser from './getCurrentUser'; // Adjust the import path as needed
+ // Assuming Response is imported from express or a similar framework
 
-const getConversationById = async (conversationId) => {
-  try {
-    const currentUser = await getCurrentUser();
+export async function getConversationById(conversationId:any) {
+  
+    await mongoose.connect(process.env.MONGO_URI);
 
-    if (!currentUser?.email) {
-      return null;
+  
+    const conversation = await Conversation.findById(conversationId).populate('users').exec();
+
+    if (!conversation) {
+      return  'Conversation not found' ;
     }
 
-    // Ensure the conversation ID is a valid MongoDB ObjectID
-    if (!mongoose.Types.ObjectId.isValid(conversationId)) {
-      return null;
-    }
-
-    const conversation = await Conversation.findById(conversationId)
-      .populate('users')
-      .exec();
 
     return conversation;
-  } catch (error) {
-    console.error('Error fetching conversation:', error);
-    return null;
-  }
-};
 
-export default getConversationById;
+  } 
