@@ -19,9 +19,9 @@ interface ProfileDrawerProps{
 const ProfileDrawer:React.FC<ProfileDrawerProps> = ({ data, otherUserName, isOpen, onClose }) => {
 
 
-   const joinedDate =useMemo(()=>{
-    return format(new Date(otherUserName.createdAt),'PP');
-   },[otherUserName.createdAt])
+//    const joinedDate =useMemo(()=>{
+//     return format(new Date(otherUserName.createdAt),'PP');
+//    },[otherUserName.createdAt])
 
   return (
     <div>ProfileDrawer</div>
