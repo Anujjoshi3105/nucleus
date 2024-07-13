@@ -40,7 +40,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ conversationId: data._id, sessionUserId: session.user.id }),
+          body: JSON.stringify({ conversationId: data._id, sessionUserId: session.user?.id }),
         });
 
         if (response.ok) {
@@ -54,7 +54,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
       }
     };
 
-    if (session.user.id) {
+    if (session.user?.id) {
       fetchOtherUserName();
     }
   }, [data._id, session?.user?.id, router, session]);
@@ -112,3 +112,5 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
 }
 
 export default ConversationBox;
+
+
