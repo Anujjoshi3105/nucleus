@@ -7,10 +7,9 @@ import GoogleProvider from "next-auth/providers/google";
 import EmailProvider from "next-auth/providers/email";
 import type { Adapter } from "next-auth/adapters";
 import { MongoDBAdapter } from "@next-auth/mongodb-adapter";
-import {User} from '@/models/User'
-import clientPromise from '@/app/lib/db'
+import { User } from "@/models/User";
+import clientPromise from "@/app/lib/db";
 import mongoose from "mongoose";
-
 
 export const authOptions: NextAuthOptions = {
   pages: {
@@ -37,8 +36,7 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Please enter an email or password");
         }
 
-
-        await mongoose.connect(process.env.MONGO_URI);
+        await mongoose.connect(process.env.MONGO_URI || "");
 
         // check to see if user already exist
         const user = await User.findOne({ email: credentials.email });
@@ -51,7 +49,7 @@ export const authOptions: NextAuthOptions = {
         // check to see if passwords match
         const passwordMatch = await bcrypt.compare(
           credentials.password,
-          user.password,
+          user.password
         );
 
         // console.log(passwordMatch);

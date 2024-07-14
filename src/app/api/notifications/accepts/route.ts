@@ -1,35 +1,35 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
-import mongoose from 'mongoose';
-import Notification from '@/models/Notification';
-import Profile from '@/models/Profile';
-import { NextRequest } from 'next/server';
-
+import type { NextApiRequest, NextApiResponse } from "next";
+import mongoose from "mongoose";
+import Notification from "@/models/Notification";
+import Profile from "@/models/Profile";
+import { NextRequest } from "next/server";
 
 export async function POST(req: any) {
-
   const { notificationId } = await req.json();
 
-
   if (!notificationId) {
-    return Response.json({ message: 'Notification ID is required in the request body' });
+    return Response.json({
+      message: "Notification ID is required in the request body",
+    });
   }
 
-  await mongoose.connect(process.env.MONGO_URI);
+  await mongoose.connect(process.env.MONGO_URI || "");
 
   const notification = await Notification.findById(notificationId);
 
   if (!notification) {
-    return Response.json('Notification not found');
+    return Response.json("Notification not found");
   }
 
-
-  if (notification.status !== 'pending') {
-    return Response.json('Notification already processed');
+  if (notification.status !== "pending") {
+    return Response.json("Notification already processed");
   }
-  const receiverProfile = await Profile.findOne({ user: notification.receiverId });
+  const receiverProfile = await Profile.findOne({
+    user: notification.receiverId,
+  });
   const senderProfile = await Profile.findOne({ user: notification.senderId });
 
-  notification.status = 'accepted';
+  notification.status = "accepted";
   await notification.save();
 
   // const formattedAcceptanceTime = formatAcceptanceTime(notification.acceptedAt);
@@ -38,17 +38,14 @@ export async function POST(req: any) {
     receiverId: notification.senderId,
     senderId: notification.receiverId,
     message: `Connection request accepted by ${receiverProfile.name} `,
-    status: 'accepted',
-
+    status: "accepted",
   });
 
   await senderNotification.save();
-  
 
   if (!receiverProfile || !senderProfile) {
-    return Response.json({ message: 'Profiles not found' });
+    return Response.json({ message: "Profiles not found" });
   }
-
 
   receiverProfile.friends.push(notification.senderId);
   senderProfile.friends.push(notification.receiverId);
@@ -56,10 +53,7 @@ export async function POST(req: any) {
   await receiverProfile.save();
   await senderProfile.save();
 
-
-
-  return Response.json({ message: 'Friend request accepted' });
-
+  return Response.json({ message: "Friend request accepted" });
 
   // function formatAcceptanceTime(acceptedAt: Date): string {
   //   const now = new Date();
@@ -79,7 +73,4 @@ export async function POST(req: any) {
   //     return `accepted just now`;
   //   }
   // }
-
 }
-
-
