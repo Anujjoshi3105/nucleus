@@ -99,8 +99,9 @@ const FriendsList = () => {
         }
 
         const data = await response.json();
+        
         console.log('Conversation started with data:', data);
-        router.push(`/conversations/${data.id}`);
+        router.push(`/conversations/${data._id}`);
       } catch (error) {
         console.error('Error starting conversation:', error);
         setError('Error starting conversation');

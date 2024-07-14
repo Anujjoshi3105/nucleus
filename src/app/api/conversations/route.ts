@@ -34,8 +34,10 @@ import Conversation from '@/models/Conversation'
           isGroup,
           userIds: [...members.map((member: { value: string }) => member.value), currentUserId]
         });
-    
+
+        
         await newConversation.save();
+        await newConversation.populate('users', 'name email');
 
         return  Response.json('newconversation');
 
@@ -46,26 +48,25 @@ import Conversation from '@/models/Conversation'
           { userIds: { $all: [currentUserId, userId] } },
           { userIds: { $all: [userId, currentUserId] } }
         ]
-      });
+      }).populate('users', 'name email').exec();
 
 
       // const singleConversation =existingConversations[0];
 
       if(existingConversation){
+        
         return Response.json(existingConversation);
       }
 
       const newConversation = new Conversation({
         userIds: [currentUserId, userId],
       });
-    
+
       await newConversation.save();
-    
+      await newConversation.populate('users', 'name email')
 
       return Response.json(newConversation);
 
-  
-   
      
   }
 

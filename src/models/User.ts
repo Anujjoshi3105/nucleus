@@ -97,12 +97,8 @@ const userSchema = new Schema<IUser>({
   passwordResetTokenExp: { type: Date },
   conversationIds: [{ type: Schema.Types.ObjectId, ref: 'Conversation' }],
   conversations: [{ type: Schema.Types.ObjectId, ref: 'Conversation' }],
-
   seenMessageIds: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
   seenMessages: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
-
-
-
   messages: [{ type: Schema.Types.ObjectId, ref: 'Message' }],
 }, {
   timestamps: true,

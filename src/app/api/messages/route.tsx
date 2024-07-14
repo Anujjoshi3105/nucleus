@@ -40,7 +40,10 @@ import { User } from '@/models/User';
         },
         { new: true }
       )
-      .populate('users')
+      .populate({
+        path: 'users',
+        select: 'name email',
+      })
       .populate({
         path: 'messages',
         populate: { path: 'seen' }
