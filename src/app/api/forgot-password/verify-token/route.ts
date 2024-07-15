@@ -10,9 +10,8 @@ export const POST = async (request: Request) => {
     return new NextResponse("Missing Fields", { status: 400 });
   }
 
+  await mongoose.connect(process.env.MONGO_URI || "");
 
-  await mongoose.connect(process.env.MONGO_URI);
-  
   const user = await User.findOne({
     passwordResetToken: token,
     passwordResetTokenExp: { $gte: new Date() },
