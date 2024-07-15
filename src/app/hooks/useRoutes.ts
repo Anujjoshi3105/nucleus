@@ -1,31 +1,37 @@
-import {  usePathname } from "next/navigation";
-import { useMemo } from "react";
+import { usePathname, useRouter } from 'next/navigation';
+import { useMemo } from 'react';
 import React from 'react';
-import {HiChat} from 'react-icons/hi';
-import { HiArrowLeftOnRectangle,HiUsers } from "react-icons/hi2";
-import useConversation from "./useConversation";
+import { HiChat, HiUsers } from 'react-icons/hi';
+import useConversation from './useConversation';
 
-const useRoutes=()=>{
-    const pathname =usePathname();
-    const {conversationId} =useConversation();
+const useRoutes = () => {
+  const pathname = usePathname();
+  const router = useRouter();
+  const { conversationId } = useConversation();
 
-    const routes=useMemo(()=>[
-        {
-           label:'Chat',
-           href:'/conversations',
-           icon:HiChat,
-           active :pathname==='/conversations'|| !!conversationId
-        },
-        {
-            label:'Users',
-            href:'/chats',
-            icon:HiUsers,
-            active :pathname==='/chats'
-         }
+  const handleNavigate = (path: string) => {
+    console.log(`Navigating to ${path}`);
+    router.push(path);
+  };
 
-    ],[pathname,conversationId])
+  const routes = useMemo(() => [
+    {
+      label: 'Chat',
+      href: '/conversations',
+      icon: HiChat,
+      active: pathname === '/conversations' || !!conversationId,
+      onClick: () => handleNavigate('/conversations'),
+    },
+    {
+      label: 'Users',
+      href: '/chats',
+      icon: HiUsers,
+      active: pathname === '/chats',
+      onClick: () => handleNavigate('/chats'),
+    },
+  ], [pathname, conversationId]);
 
-    return routes;
-}
+  return routes;
+};
 
 export default useRoutes;

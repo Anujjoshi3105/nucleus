@@ -7,7 +7,7 @@ import Message from '@/models/Message';
 export async function POST(req:any, { params }: { params: { conversationId: string }} ){
 
     const { conversationId } = params;
-    const {currUserId}=req.json();
+    const { currUserId } = await req.json();
 
     if(!conversationId){
         return Response.json('conversation Id required');
