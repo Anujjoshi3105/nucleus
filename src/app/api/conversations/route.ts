@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import UserProfile from "@/models/Profile";
 import Conversation from "@/models/Conversation";
+import { Types } from "mongoose";
 
 export async function POST(req: any) {
   await mongoose.connect(process.env.MONGO_URI || "");
@@ -9,10 +10,8 @@ export async function POST(req: any) {
 
   const { currentUserId, userId, isGroup, members, name } = body;
 
-  if (!userId) {
-    return Response.json({ message: "Invalid friend ID" });
-  }
-
+  
+ 
   if (isGroup && (!members || members.length < 2 || !name)) {
     return Response.json("Invalid group Data");
   }
@@ -22,7 +21,7 @@ export async function POST(req: any) {
       name,
       isGroup,
       userIds: [
-        ...members.map((member: { value: string }) => member.value),
+        ...members.map((member: { value: { id: string } }) => member.value.id),
         currentUserId,
       ],
     });
@@ -57,3 +56,4 @@ export async function POST(req: any) {
 
   return Response.json(newConversation);
 }
+

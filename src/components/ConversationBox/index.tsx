@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import { FullConversationType } from '@/types/conversation';
 import Avatara from '../Avatara';
 import { format } from 'date-fns';
+import AvataraGroup from '../AvataraGroup';
 
 interface ConversationBoxProps { 
    data: FullConversationType;
@@ -86,7 +87,12 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
         selected ? 'bg-neutral-100' : 'bg-white'
       )}
     >
-      <Avatara />
+      {data.isGroup ?(
+        <AvataraGroup/>
+
+      ):
+      (<Avatara />)}
+      
       <div className='min-w-0 flex-1'>
         <div className='focus:outline-none'>
           <div className='flex justify-between items-center mb-1'>

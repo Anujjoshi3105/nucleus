@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 import Modal from '../Modal';
 import Input from '../Input';
 import Select from '../Select';
-
+import { useSession } from 'next-auth/react';
 interface Friend {
     id: string;
     name: string;
@@ -26,6 +26,7 @@ const GroupChatModal:React.FC<GroupChatModalProps>= ({
 }) => {
 
     const router =useRouter();
+    const { data: session } = useSession();
     const [isLoading ,setIsLoading] =useState(false);
      
     const {register 
@@ -57,33 +58,90 @@ const GroupChatModal:React.FC<GroupChatModalProps>= ({
 
     // }
 
+    // const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    //     setIsLoading(true);
+
+
+    //     try {
+    //         const response = await fetch('/api/conversations', {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({
+    //                 ...data,
+    //                 isGroup: true
+
+    //             }),
+    //         });
+
+    //         if (!response.ok) {
+    //             throw new Error('Failed to create conversation');
+    //         }
+
+    //         router.refresh();
+    //         onClose();
+    //     } catch (error) {
+    //         toast.error('Something went wrong');
+    //     } finally {
+    //         setIsLoading(false);
+    //     }
+    // }
+
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-        setIsLoading(true);
-        try {
-            const response = await fetch('/api/conversations', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    ...data,
-                    isGroup: true
-                }),
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to create conversation');
-            }
-
-            router.refresh();
-            onClose();
-        } catch (error) {
-            toast.error('Something went wrong');
-        } finally {
-            setIsLoading(false);
-        }
-    }
-
+      setIsLoading(true);
+      try {
+          // Fetch ids for each member
+          const updatedMembers = await Promise.all(data.members.map(async (member: any) => {
+              const response = await fetch('/api/userProfileFind', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify({ value: member.value }),
+              });
+  
+              if (!response.ok) {
+                  throw new Error('Failed to fetch user profile');
+              }
+  
+              const id = await response.json();
+              return { value: id, label: member.label };
+          }));
+  
+          // Update members directly in data
+          data.members = updatedMembers;
+  
+          // Add isGroup to data
+          
+  
+          // Send final request to create conversation
+          const response = await fetch('/api/conversations', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                ...data,
+                members: updatedMembers,
+                isGroup: true,
+                currentUserId: session?.user?.id, 
+              }),
+          });
+  
+          if (!response.ok) {
+              throw new Error('Failed to create conversation');
+          }
+  
+          router.refresh();
+          onClose();
+      } catch (error) {
+          toast.error('Something went wrong');
+      } finally {
+          setIsLoading(false);
+      }
+  }
+  
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -147,3 +205,4 @@ const GroupChatModal:React.FC<GroupChatModalProps>= ({
 }
 
 export default GroupChatModal
+

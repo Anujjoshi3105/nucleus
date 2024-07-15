@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Fragment, useMemo, useState } from "react";
+import React, { Fragment, useMemo, useEffect, useState } from "react";
 import { IConversation } from "@/models/Conversation";
 import { IUser } from "@/models/User";
 import { format } from "date-fns";
@@ -10,6 +10,8 @@ import { Avatar } from "@mui/material";
 import Avatara from "../Avatara";
 import Modal from "../Modal";
 import ComfirmModal from "../ComfirmModal";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface ProfileDrawerProps {
   otherUserName: string | null;
@@ -26,11 +28,53 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
   isOpen,
   onClose,
 }) => {
-  //    const joinedDate =useMemo(()=>{
-  //     return format(new Date(otherUserName.createdAt),'PP');
-  //    },[otherUserName.createdAt]);
 
-  const joinedDate = "May 28 2024";
+
+     const joinedDate =useMemo(()=>{
+      return format(new Date(data.createdAt),'PP');
+     },[data.createdAt]);
+
+  const { data: session } = useSession();
+  const [userInfo, setUserInfo] = useState<IUser[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
+
+  if (!session) {
+    router.push("/signin");
+    return;
+  }
+
+  const fetchUserInfo = async () => {
+    try {
+      const response = await fetch("/api/users", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userIds: Array.isArray(data.userIds) ? data.userIds : [data.userIds],
+          currentUserId: session?.user?.id,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user info");
+      }
+
+      const result = await response.json();
+      setUserInfo(result.users);
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (data && session) {
+      fetchUserInfo();
+    }
+  }, [data, session]);
+
+  
 
   const title = useMemo(() => {
     return data.name || otherUserName;
@@ -38,12 +82,10 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
 
   const statusText = useMemo(() => {
     if (data.isGroup) {
-      return `${data.users.length} members`;
+      return `${data.userIds.length} members`;
     }
     return "Active";
   }, [data]);
-
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
     <>
@@ -116,13 +158,33 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                           </div>
                           <div className="w-full pb-5 pt-5 sm:px-0 sm:pt-0">
                             <dl className="space-y-8 px-4 sm:space-y-6 sm:px-6">
+                              {data.isGroup && (
+                                <div>
+                                  <dt className="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0">
+                                    Members
+                                  </dt>
+                                  <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
+                                    {userInfo
+                                      ? userInfo.length > 0
+                                        ? userInfo
+                                            .map((user) => user.name)
+                                            .join(", ")
+                                        : "No members"
+                                      : "Loading..."}
+                                  </dd>
+                                </div>
+                              )}
                               {!data.isGroup && (
                                 <div>
                                   <dt className="text-sm font-medium text-gray-500 sm:w-40 sm:flex-shrink-0">
                                     Email
                                   </dt>
                                   <dd className="mt-1 text-sm text-gray-900 sm:col-span-2">
-                                    gunj@gmail.com
+                                    {
+                                      userInfo.find(
+                                        (user) => user.id === data.userIds[1]
+                                      )?.email
+                                    }
                                   </dd>
                                 </div>
                               )}

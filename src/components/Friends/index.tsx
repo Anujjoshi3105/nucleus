@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from "next/navigation";
 import Avatara from '../Avatara';
+import LoadingModal from '../LodingModal';
 
 interface Friend {
   id: string;
@@ -69,7 +70,7 @@ const FriendsList = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            friendId,  // Sending only the session ID
+            friendId,  
           }),
         });
   
@@ -116,6 +117,9 @@ const FriendsList = () => {
   if (error) return <div>{error}</div>;
 
   return (
+   <>
+   {loading && (<LoadingModal/>)}
+   
     <div>
       <ul>
         {friends.map((friend) => (
@@ -138,6 +142,7 @@ const FriendsList = () => {
         ))}
       </ul>
     </div>
+   </>
   );
 };
 
