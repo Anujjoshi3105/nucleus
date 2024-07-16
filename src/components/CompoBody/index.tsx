@@ -6,6 +6,8 @@ import useConversation from '@/app/hooks/useConversation';
 import MessageBox from '../MessageBox';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import { pusherClient } from '@/app/lib/pusher';
+import { find, update } from 'lodash';
 
 interface BodyProps {
   initialMessages: FullMessageType[];
@@ -14,7 +16,7 @@ interface BodyProps {
 const CompoBody: React.FC<BodyProps> = ({ initialMessages }) => {
   const [messages, setMessages] = useState(initialMessages);
   const bottomRef = useRef<HTMLDivElement>(null);
-  const { conversationId } = useConversation();
+  const { conversationId} = useConversation();
   const { data: session, status } = useSession();
   const router = useRouter();
 
@@ -35,24 +37,58 @@ const CompoBody: React.FC<BodyProps> = ({ initialMessages }) => {
     }
   }, [messages]);
 
-  useEffect(() => {
-    if (conversationId && session?.user?.id) {
-      fetch(`/api/conversation/${conversationId}/seen`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ currUserId: session.user.id }),
-      })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Seen status updated:', data);
-      })
-      .catch(error => {
-        console.error('Error updating seen status:', error);
-      });
-    }
-  }, [conversationId, session]);
+  useEffect(()=>{
+
+     pusherClient.subscribe(conversationId);
+     bottomRef?.current?.scrollIntoView();
+
+     const messageHandler =(message:FullMessageType)=>{
+
+        setMessages((current)=>{
+          if(find(current ,{id:message.id})){
+            return current;
+          }
+          return [...current, message]
+        });
+        bottomRef?.current?.scrollIntoView();
+       
+     }
+
+     const updateMessageHandler=()=>{
+
+     }
+
+     pusherClient.bind('messages:new',messageHandler);
+     pusherClient.bind('message:update',updateMessageHandler)
+
+     return()=>{
+      pusherClient.unsubscribe(conversationId);
+      pusherClient.unbind('messages:new',messageHandler);
+
+      pusherClient.unbind('message:Update',updateMessageHandler)
+     }
+
+  },[conversationId]);
+
+
+  // useEffect(() => {
+  //   if (conversationId && session?.user?.id) {
+  //     fetch(`/api/conversation/${conversationId}/seen`, {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ currUserId: session?.user.id }),
+  //     })
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       console.log('Seen status updated:', data);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error updating seen status:', error);
+  //     });
+  //   }
+  // }, [conversationId, session]);
 
   return (
     <div className='flex-1 overflow-y-auto'>

@@ -165,18 +165,22 @@ const GroupChatModal:React.FC<GroupChatModalProps>= ({
           errors={errors}
           />
 
-          <Select
-          disabled={isLoading}
-          label="Members"
-          options={users.map((users)=>({
-            value:users.id,
-            label:users.name
-          }))}
-           onChange={(value)=>setValue('members',value,{
-            shouldValidate:true
-           })}
-           value={members}
-          />
+{Array.isArray(users) && users.length > 0 ? (
+                <Select
+                  disabled={isLoading}
+                  label="Members"
+                  options={users.map((user) => ({
+                    value: user.id,
+                    label: user.name,
+                  }))}
+                  onChange={(value) => setValue('members', value, {
+                    shouldValidate: true
+                  })}
+                  value={members}
+                />
+              ) : (
+                <p>Loading users...</p>
+              )}
 
          </div>
            </div>

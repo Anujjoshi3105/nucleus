@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSession } from 'next-auth/react';
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import Avatara from '../Avatara';
 import LoadingModal from '../LodingModal';
 
@@ -40,8 +40,8 @@ const FriendsList = () => {
         throw new Error('Failed to fetch friends');
       }
 
-      const data = await response.json();
-      setFriends(data);
+      const data: Friend[] = await response.json();
+      setFriends(Array.isArray(data) ? data : []);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -54,16 +54,11 @@ const FriendsList = () => {
   }, [fetchFriends]);
 
   const handleClick = useCallback(
-
-   
     async (friendId: string) => {
       console.log('handleClick called with friendId:', friendId);
       setLoading(true);
-     
-    
 
       try {
-
         const userIdFindResponse = await fetch('/api/userIdFind', {
           method: 'POST',
           headers: {
@@ -80,8 +75,6 @@ const FriendsList = () => {
   
         const userIdFindData = await userIdFindResponse.json();
 
-
-
         const response = await fetch('/api/conversations', {
           method: 'POST',
           headers: {
@@ -93,8 +86,6 @@ const FriendsList = () => {
           }),
         });
 
-    
-        
         if (!response.ok) {
           throw new Error('Failed to start conversation');
         }
@@ -117,32 +108,35 @@ const FriendsList = () => {
   if (error) return <div>{error}</div>;
 
   return (
-   <>
-   {loading && (<LoadingModal/>)}
-   
-    <div>
-      <ul>
-        {friends.map((friend) => (
-          <li
-            key={friend.id}
-            onClick={() => handleClick(friend.id)}
-            className='w-full relative flex items-center space-x-3 bg-white p-3 hover:bg-neutral-100 rounded-lg transition cursor-pointer'
-          >
-            <Avatara />
-            <div className='min-w-0 flex-1'>
-              <div className='focus:outline-none'>
-                <div className='flex justify-between items-center mb-1'>
-                  <p className='text-sm font-medium text-gray-900'>
-                    {friend.name}
-                  </p>
+    <>
+      {loading && <LoadingModal />}
+      <div>
+        <ul>
+          {Array.isArray(friends) && friends.length > 0 ? (
+            friends.map((friend) => (
+              <li
+                key={friend.id}
+                onClick={() => handleClick(friend.id)}
+                className='w-full relative flex items-center space-x-3 bg-white p-3 hover:bg-neutral-100 rounded-lg transition cursor-pointer'
+              >
+                <Avatara />
+                <div className='min-w-0 flex-1'>
+                  <div className='focus:outline-none'>
+                    <div className='flex justify-between items-center mb-1'>
+                      <p className='text-sm font-medium text-gray-900'>
+                        {friend.name}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-          </li>
-        ))}
-      </ul>
-    </div>
-   </>
+              </li>
+            ))
+          ) : (
+            <p>No friends found</p>
+          )}
+        </ul>
+      </div>
+    </>
   );
 };
 

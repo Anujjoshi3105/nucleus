@@ -2,6 +2,8 @@ import mongoose from "mongoose";
 import UserProfile from "@/models/Profile";
 import Conversation from "@/models/Conversation";
 import { Types } from "mongoose";
+import { User } from "@/models/User";
+import { pusherServer } from "@/app/lib/pusher";
 
 export async function POST(req: any) {
   await mongoose.connect(process.env.MONGO_URI || "");
@@ -29,7 +31,14 @@ export async function POST(req: any) {
     await newConversation.save();
     await newConversation.populate("users", "name email");
 
-    return Response.json("newconversation");
+    for (const userId of newConversation.userIds) {
+      const user = await User.findById(userId);
+      if (user?.email) {
+        await pusherServer.trigger(user.email, "conversation:new", newConversation);
+      }
+    }
+
+    return Response.json(newConversation);
   }
 
   const existingConversation = await Conversation.findOne({
@@ -53,6 +62,13 @@ export async function POST(req: any) {
 
   await newConversation.save();
   await newConversation.populate("users", "name email");
+
+  for (const userId of newConversation.userIds) {
+    const user = await User.findById(userId);
+    if (user?.email) {
+      await pusherServer.trigger(user.email, "conversation:new", newConversation);
+    }
+  }
 
   return Response.json(newConversation);
 }

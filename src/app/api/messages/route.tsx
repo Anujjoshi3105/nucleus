@@ -3,6 +3,7 @@ import UserProfile from "@/models/Profile";
 import Conversation from "@/models/Conversation";
 import Message from "@/models/Message";
 import { User } from "@/models/User";
+import { pusherServer } from "@/app/lib/pusher";
 
 export async function POST(req: any) {
   await mongoose.connect(process.env.MONGO_URI || "");
@@ -47,5 +48,25 @@ export async function POST(req: any) {
     })
     .exec();
 
+    await pusherServer.trigger(conversationId,'messages:new',newMessage);
+
+  const  lastMessage =updatedConversation.messages[updatedConversation.messages.length-1];
+
+  // updatedConversation.users.map((user) => {
+  //   pusherServer.trigger(user.email!, 'conversation:update', {
+  //     id: conversationId,
+  //     messages: [lastMessage],
+  //   });
+  // });
+
+  for (const userId of updatedConversation.userIds) {
+    const user = await User.findById(userId);
+    if (user?.email) {
+      await pusherServer.trigger(user.email, 'conversation:update', {
+        id: conversationId,
+        messages: [lastMessage],
+      });
+    }
+  }
   return Response.json(newMessage);
 }

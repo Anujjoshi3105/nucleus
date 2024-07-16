@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 
 import Conversation from '@/models/Conversation';
 import { User } from '@/models/User';
+import { pusherServer } from '@/app/lib/pusher';
 
 interface IParams {
   conversationId?: string;
@@ -42,6 +43,12 @@ export async function DELETE(
     if (deleteResult.deletedCount === 0) {
       return Response.json('Conversation not found or unauthorized');
     }
+
+    existingConversation.users.forEach((user)=>{
+      if(user.email){
+        pusherServer.trigger(user.email ,'conversation:remove',existingConversation)
+      }
+    })
 
     return Response.json({ message: 'Conversation deleted successfully' });
 
