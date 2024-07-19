@@ -36,11 +36,11 @@ const Header = () => {
     window.addEventListener("scroll", handleStickyNavbar);
   });
 
-  useEffect(() => {
-    if (session?.user?.id) {
-      fetchNotificationCount(session.user.id);
-    }
-  }, [session?.user?.id]);
+  // useEffect(() => {
+  //   if (session?.user?.id) {
+  //     fetchNotificationCount(session.user.id);
+  //   }
+  // }, []);
 
 
   const fetchNotificationCount = async (id:string) => {

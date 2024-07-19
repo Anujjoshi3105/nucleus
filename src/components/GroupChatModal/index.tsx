@@ -125,7 +125,7 @@ const GroupChatModal:React.FC<GroupChatModalProps>= ({
                 ...data,
                 members: updatedMembers,
                 isGroup: true,
-                currentUserId: session?.user?.id, 
+                currentUserId: (session?.user as any).id
               }),
           });
   

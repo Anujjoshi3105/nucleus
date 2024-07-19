@@ -13,7 +13,7 @@ export default async function ServerConversationLayout({ children }: { children:
     return (
         <SideBar>
         <div className="h-full">
-            <ConversationList />
+           <ConversationList/>
             {children}
         </div>
     </SideBar>

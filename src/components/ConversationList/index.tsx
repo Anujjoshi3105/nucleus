@@ -190,7 +190,7 @@ import { pusherClient } from '@/app/lib/pusher';
 import { find, update } from 'lodash';
 
 interface ConversationListProps {
-  initialItems: FullConversationType[];
+  
 }
 
 interface Friend {
@@ -198,8 +198,8 @@ interface Friend {
   name: string;
 }
 
-const ConversationList: React.FC<ConversationListProps> = ({ initialItems }) => {
-  const [items, setItems] = useState<FullConversationType[]>(initialItems);
+const ConversationList: React.FC<ConversationListProps> = () => {
+  const [items, setItems] = useState<FullConversationType[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { conversationId, isOpen } = useConversation();
   const { data: session, status } = useSession();
@@ -208,7 +208,7 @@ const ConversationList: React.FC<ConversationListProps> = ({ initialItems }) => 
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const userId = useMemo(() => session?.user?.id, [session]);
+  const userId = useMemo(() => (session?.user as any).id, [session]);
 
   const fetchFriends = useCallback(async () => {
     if (status === 'loading') return;

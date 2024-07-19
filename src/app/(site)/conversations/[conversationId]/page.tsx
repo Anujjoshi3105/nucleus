@@ -29,7 +29,7 @@ const ConversationId: React.FC<{ params: IParams }> = ({ params }) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ conversationId: params.conversationId, sessionUserId: session?.user?.id }),
+          body: JSON.stringify({ conversationId: params.conversationId, sessionUserId: (session?.user as any).id}),
         });
 
         if (response.ok) {
@@ -72,7 +72,7 @@ const ConversationId: React.FC<{ params: IParams }> = ({ params }) => {
     } else if (status === 'unauthenticated') {
       router.push('/signin');
     }
-  }, [params.conversationId, session?.user?.id, status, router]);
+  }, [params.conversationId, (session?.user as any).id, status, router]);
 
   
   if (loading) {

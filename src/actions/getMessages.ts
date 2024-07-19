@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Conversation from "@/models/Conversation";
 import Message from "@/models/Message";
 
+
 const getMessages = async (conversationId: any) => {
   try {
     await mongoose.connect(process.env.MONGO_URI || "");
@@ -28,3 +29,4 @@ const getMessages = async (conversationId: any) => {
 };
 
 export default getMessages;
+

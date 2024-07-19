@@ -24,7 +24,7 @@ const FriendsList = () => {
       return;
     }
 
-    const userId = session.user?.id;
+    const userId = (session.user as any).id;
     setLoading(true);
 
     try {
@@ -82,7 +82,7 @@ const FriendsList = () => {
           },
           body: JSON.stringify({
             userId: userIdFindData.userId,
-            currentUserId: session?.user?.id 
+            currentUserId: (session?.user as any).id
           }),
         });
 

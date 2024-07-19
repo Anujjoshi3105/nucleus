@@ -33,7 +33,7 @@ const NotificationPage = () => {
 
   const fetchNotifications = async () => {
     try {
-      const response = await fetch(`/api/notifications/fetch/${session?.user.id}`);
+      const response = await fetch(`/api/notifications/fetch/${(session?.user as any).id}`);
       if (response.ok) {
         const data: Notification[] = await response.json();
         console.log('Fetched notifications:', data); // Log fetched data
@@ -141,7 +141,6 @@ const NotificationPage = () => {
             <li 
               key={notification._id} 
               className="mb-4 p-4 bg-gray-100 dark:bg-gray-800 rounded shadow flex justify-between items-center"
-              onClick={() => handleNotificationClick(notification.senderId)}
               style={{ cursor: 'pointer' }}
             >
               <span className="text-black dark:text-white">{notification.message}</span>

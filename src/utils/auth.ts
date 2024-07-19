@@ -59,7 +59,11 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Incorrect password");
         }
 
-        return user;
+        return {
+          id: user.id.toString(),
+          name: user.name,
+          email: user.email,
+        };
       },
     }),
 

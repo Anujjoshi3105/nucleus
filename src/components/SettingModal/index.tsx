@@ -34,7 +34,7 @@ const SettingModal: React.FC<SettingModalProps> = ({ isOpen, onClose }) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ userId: session.user.id }),
+          body: JSON.stringify({ userId: (session?.user as any).id }),
         });
 
         if (!response.ok) {

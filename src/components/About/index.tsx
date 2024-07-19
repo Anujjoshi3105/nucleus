@@ -28,7 +28,7 @@ const About: React.FC = () => {
     achievements: [''],
     links: [{ url: '', title: '', description: '', image: '' }],
     useremail: session?.user?.email || '',
-    user: session?.user?.id || '',
+    user: (session?.user as any).id || '',
     friends: [] 
   });
 
@@ -75,12 +75,12 @@ const About: React.FC = () => {
 
  
 
-      setUserProfile(prevProfile => ({
+      setUserProfile((prevProfile:any) => ({
         ...prevProfile,
-        user: session.user?.id,
+        user:(session.user as any).id,
         useremail: session.user?.email
       }));
-      fetchUserProfile(session?.user.id,session);
+      fetchUserProfile((session.user as any).id,session);
     } else if (status === 'unauthenticated') {
       router.push('/signin');
     }
@@ -114,14 +114,14 @@ const About: React.FC = () => {
   };
 
   const handleInputChange = (key: string, value: string) => {
-    setUserProfile(prev => ({
+    setUserProfile((prev:any) => ({
       ...prev,
       [key]: value
     }));
   };
 
   const handleArrayInputChange = (key: string, index: number, value: string) => {
-    setUserProfile(prev => {
+    setUserProfile((prev:any) => {
       const newArray = [...prev[key]];
       newArray[index] = value;
       return { ...prev, [key]: newArray };
@@ -129,14 +129,14 @@ const About: React.FC = () => {
   };
 
   const handleAddField = (key: string) => {
-    setUserProfile(prev => ({
+    setUserProfile((prev:any)=> ({
       ...prev,
       [key]: [...prev[key], '']
     }));
   };
 
   const handleRemoveField = (key: string, index: number) => {
-    setUserProfile(prev => ({
+    setUserProfile((prev:any) => ({
       ...prev,
       [key]: prev[key].filter((_: string, i: number) => i !== index)
     }));

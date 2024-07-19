@@ -44,7 +44,7 @@ const ProfileDetail: React.FC = () => {
         if (response.ok) {
           const data = await response.json();
           setProfile(data);
-          if (data.friends.includes(session?.user?.id)) {
+          if (data.friends.includes((session?.user as any).id)) {
             setConnectionStatus('connected');
           }
         } else {
@@ -92,7 +92,7 @@ const ProfileDetail: React.FC = () => {
       return;
     }
 
-    const senderId = session.user?.id;
+    const senderId =(session?.user as any).id;
     const receiverId = profile?.user;
 
     try {

@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import Notification from "@/models/Notification";
+import { NextRequest } from "next/server";
 
 export async function GET(
   req: NextRequest,

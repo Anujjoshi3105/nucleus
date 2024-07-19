@@ -5,7 +5,7 @@ import { User } from '@/models/User';
 export async function POST(req: any) {
   try {
     
-    await mongoose.connect(process.env.MONGO_URI);
+    await mongoose.connect(process.env.MONGO_URI || "");
     
     const { userId } = await req.json();
 

@@ -130,7 +130,7 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ isOpen, onClose }) => {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ userId: session.user?.id }),
+      body: JSON.stringify({ userId: (session.user as any).id }),
     })
       .then((response) => {
         if (!response.ok) {
