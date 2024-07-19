@@ -30,7 +30,7 @@ const CompoForm = () => {
       return;
     }
 
-    const userId = session.user?.id;
+    const userId =(session?.user as any).id;
 
     setValue('message', '', { shouldValidate: true });
 
@@ -64,7 +64,7 @@ const CompoForm = () => {
       return;
     }
 
-    const userId = session.user?.id;
+    const userId = (session?.user as any).id;
 
     try {
       const response = await fetch('/api/messages', {

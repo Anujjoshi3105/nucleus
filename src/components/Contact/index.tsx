@@ -74,7 +74,7 @@ const Profiles: React.FC = () => {
   useEffect(() => {
     if (session?.user) {
       console.log(session);
-      setProfiles(prevProfiles => prevProfiles.filter(profile => profile.user !== session?.user?.id));
+      setProfiles(prevProfiles => prevProfiles.filter(profile => profile.user !== (session?.user as any).id));
     }
   }, [session]);
 

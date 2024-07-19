@@ -41,7 +41,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ conversationId: data._id, sessionUserId: session.user?.id }),
+          body: JSON.stringify({ conversationId: data._id, sessionUserId: (session?.user as any).id }),
         });
 
         if (response.ok) {
@@ -55,10 +55,10 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({ data, selected }) => 
       }
     };
 
-    if (session.user?.id) {
+    if ((session?.user as any).id) {
       fetchOtherUserName();
     }
-  }, [data._id, session?.user?.id, router, session]);
+  }, [data._id,(session?.user as any).id, router, session]);
 
   const userEmail = useMemo(() => {
     return session?.user?.email;

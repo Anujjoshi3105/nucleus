@@ -44,7 +44,7 @@ export async function DELETE(
       return Response.json('Conversation not found or unauthorized');
     }
 
-    existingConversation.users.forEach((user)=>{
+    existingConversation.users.forEach((user:any)=>{
       if(user.email){
         pusherServer.trigger(user.email ,'conversation:remove',existingConversation)
       }

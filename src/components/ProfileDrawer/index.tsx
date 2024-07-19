@@ -53,7 +53,7 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
         },
         body: JSON.stringify({
           userIds: Array.isArray(data.userIds) ? data.userIds : [data.userIds],
-          currentUserId: session?.user?.id,
+          currentUserId: (session.user as any).id
         }),
       });
 

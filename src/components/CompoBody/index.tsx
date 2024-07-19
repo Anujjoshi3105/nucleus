@@ -38,8 +38,8 @@ const CompoBody: React.FC<BodyProps> = ({ initialMessages }) => {
   }, [messages]);
 
   useEffect(()=>{
-
-     pusherClient.subscribe(conversationId);
+    const conversationIdString = conversationId.toString();
+    pusherClient.subscribe(conversationIdString);
      bottomRef?.current?.scrollIntoView();
 
      const messageHandler =(message:FullMessageType)=>{
@@ -62,7 +62,8 @@ const CompoBody: React.FC<BodyProps> = ({ initialMessages }) => {
      pusherClient.bind('message:update',updateMessageHandler)
 
      return()=>{
-      pusherClient.unsubscribe(conversationId);
+      const conversationIdString = conversationId.toString();
+      pusherClient.unsubscribe(conversationIdString);
       pusherClient.unbind('messages:new',messageHandler);
 
       pusherClient.unbind('message:Update',updateMessageHandler)
@@ -71,24 +72,7 @@ const CompoBody: React.FC<BodyProps> = ({ initialMessages }) => {
   },[conversationId]);
 
 
-  // useEffect(() => {
-  //   if (conversationId && session?.user?.id) {
-  //     fetch(`/api/conversation/${conversationId}/seen`, {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ currUserId: session?.user.id }),
-  //     })
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       console.log('Seen status updated:', data);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error updating seen status:', error);
-  //     });
-  //   }
-  // }, [conversationId, session]);
+ 
 
   return (
     <div className='flex-1 overflow-y-auto'>
