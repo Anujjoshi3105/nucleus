@@ -7,7 +7,6 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import SocialSignIn from "../SocialSignIn";
 import SwitchOption from "../SwitchOption";
-import MagicLink from "../MagicLink";
 import Loader from "@/components/Common/Loader";
 
 const Signin = () => {
@@ -89,42 +88,37 @@ const Signin = () => {
                 isPassword={isPassword}
                 setIsPassword={setIsPassword}
               />
-
-              {isPassword ? (
-                <form onSubmit={(e) => e.preventDefault()}>
-                  <div className="mb-[22px]">
-                    <input
-                      type="email"
-                      placeholder="Email"
-                      onChange={(e) =>
-                        setLoginData({ ...loginData, email: e.target.value })
-                      }
-                      className="w-full rounded-md border border-stroke bg-transparent px-5 py-3 text-base text-dark outline-none transition placeholder:text-dark-6 focus:border-primary focus-visible:shadow-none dark:border-dark-3 dark:text-white dark:focus:border-primary"
-                    />
-                  </div>
-                  <div className="mb-[22px]">
-                    <input
-                      type="password"
-                      placeholder="Password"
-                      onChange={(e) =>
-                        setLoginData({ ...loginData, password: e.target.value })
-                      }
-                      className="w-full rounded-md border border-stroke bg-transparent px-5 py-3 text-base text-dark outline-none transition placeholder:text-dark-6 focus:border-primary focus-visible:shadow-none dark:border-dark-3 dark:text-white dark:focus:border-primary"
-                    />
-                  </div>
-                  <div className="mb-9">
-                    <button
-                      onClick={loginUser}
-                      type="submit"
-                      className="flex w-full cursor-pointer items-center justify-center rounded-md border border-primary bg-primary px-5 py-3 text-base text-white transition duration-300 ease-in-out hover:bg-primary/90"
-                    >
-                      Sign In {loading && <Loader />}
-                    </button>
-                  </div>
-                </form>
-              ) : (
-                <MagicLink />
-              )}
+              <form onSubmit={(e) => e.preventDefault()}>
+                <div className="mb-[22px]">
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    onChange={(e) =>
+                      setLoginData({ ...loginData, email: e.target.value })
+                    }
+                    className="w-full rounded-md border border-stroke bg-transparent px-5 py-3 text-base text-dark outline-none transition placeholder:text-dark-6 focus:border-primary focus-visible:shadow-none dark:border-dark-3 dark:text-white dark:focus:border-primary"
+                  />
+                </div>
+                <div className="mb-[22px]">
+                  <input
+                    type="password"
+                    placeholder="Password"
+                    onChange={(e) =>
+                      setLoginData({ ...loginData, password: e.target.value })
+                    }
+                    className="w-full rounded-md border border-stroke bg-transparent px-5 py-3 text-base text-dark outline-none transition placeholder:text-dark-6 focus:border-primary focus-visible:shadow-none dark:border-dark-3 dark:text-white dark:focus:border-primary"
+                  />
+                </div>
+                <div className="mb-9">
+                  <button
+                    onClick={loginUser}
+                    type="submit"
+                    className="flex w-full cursor-pointer items-center justify-center rounded-md border border-primary bg-primary px-5 py-3 text-base text-white transition duration-300 ease-in-out hover:bg-primary/90"
+                  >
+                    Sign In {loading && <Loader />}
+                  </button>
+                </div>
+              </form>
 
               <Link
                 href="/forgot-password"
