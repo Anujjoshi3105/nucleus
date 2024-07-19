@@ -43,51 +43,7 @@ const GroupChatModal:React.FC<GroupChatModalProps>= ({
     })
     const members  = watch('members')
 
-    // const onSubmit :SubmitHandler<FieldValues>=(data)=>{
-    //    setIsLoading(true);
-    //    axios.post('api/conversation',{
-    //     ...data,
-    //     isGroup:true
-    //    })
-    //    .then(()=>{
-    //     router.refresh();
-    //     onClose();
-    //    })
-    //    .catch(()=>toast.error('Something went wrong'))
-    //    .finally(()=>setIsLoading(false));
-
-    // }
-
-    // const onSubmit: SubmitHandler<FieldValues> = async (data) => {
-    //     setIsLoading(true);
-
-
-    //     try {
-    //         const response = await fetch('/api/conversations', {
-    //             method: 'POST',
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //             },
-    //             body: JSON.stringify({
-    //                 ...data,
-    //                 isGroup: true
-
-    //             }),
-    //         });
-
-    //         if (!response.ok) {
-    //             throw new Error('Failed to create conversation');
-    //         }
-
-    //         router.refresh();
-    //         onClose();
-    //     } catch (error) {
-    //         toast.error('Something went wrong');
-    //     } finally {
-    //         setIsLoading(false);
-    //     }
-    // }
-
+  
     const onSubmit: SubmitHandler<FieldValues> = async (data) => {
       setIsLoading(true);
       try {
