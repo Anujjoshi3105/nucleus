@@ -16,10 +16,10 @@ const Hero = () => {
                 data-wow-delay=".2s"
               >
                 <h1 className="mb-6 text-3xl font-bold leading-snug text-white sm:text-4xl sm:leading-snug lg:text-5xl lg:leading-[1.2]">
-                  A single line about XYZ.
+                  A single line about Nucleus.
                 </h1>
                 <p className="mx-auto mb-9 max-w-[600px] text-base font-medium text-white sm:text-lg sm:leading-[1.44]">
-                  A small paragraph about XYZ. Lorem ipsum dolor sit amet
+                  A small paragraph about Nucleus. Lorem ipsum dolor sit amet
                   consectetur, adipisicing elit. Sequi iure exercitationem sunt
                   quas ab minus quisquam molestiae distinctio deleniti eligendi
                   dolorum quo repellat, saepe adipisci magnam deserunt eos
@@ -64,7 +64,7 @@ const Hero = () => {
 
                 <div>
                   <p className="mb-4 text-center text-base font-medium text-white/60">
-                    XYZ is now available for all popular platforms
+                    Nucleus is now available for all popular platforms
                   </p>
                   <div
                     className="wow fadeInUp flex items-center justify-center gap-4 text-center"

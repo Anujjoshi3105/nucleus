@@ -5,6 +5,8 @@ interface AvataraProps {
   onClick?: () => void;
 }
 
+
+
 const Avatara: React.FC<AvataraProps> = ({ onClick }) => {
   return (
     <div className='relative' onClick={onClick}>

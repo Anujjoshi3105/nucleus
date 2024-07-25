@@ -4,6 +4,8 @@ import { Account } from '@/models/User';
 import Conversation from '@/models/Conversation';
 import Message from '@/models/Message';
 
+
+
 export interface UserProfile extends Document {
   name: string;
   college: string;
@@ -17,11 +19,9 @@ export interface UserProfile extends Document {
   useremail: string;
   user: Schema.Types.ObjectId;
   friends: Schema.Types.ObjectId[];
-
-  
-
-  
 }
+
+
 
 const userProfileSchema = new Schema<UserProfile>({
   name: { type: String, required: true },
@@ -36,9 +36,6 @@ const userProfileSchema = new Schema<UserProfile>({
   useremail: { type: String, ref: 'User', required: true, unique: true }, 
   user: { type: Schema.Types.ObjectId, ref: 'User', required: true, unique: true }, 
   friends: [{ type: Schema.Types.ObjectId, ref: 'User' }], 
-
-  
- 
 
 });
 
