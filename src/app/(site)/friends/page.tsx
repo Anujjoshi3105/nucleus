@@ -4,7 +4,8 @@ import React from 'react';
 import FriendsList from '@/components/Friends'; 
 import { useRouter } from 'next/navigation';
 import { useSession } from 'next-auth/react';
-
+import UploadPDF from '@/components/Assignment/UploadPDF';
+import FileUpload from '@/components/File_Upload/file-upload';
 const FriendsPage = () => {
   
     const router = useRouter();
@@ -17,8 +18,7 @@ const FriendsPage = () => {
 
   return (
     <div>
-      <h1>Your Friends</h1>
-      <FriendsList />
+    <FileUpload/>
     </div>
   );
 };

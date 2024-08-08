@@ -19,6 +19,10 @@ const nextConfig = {
     images: {
       domains: ['res.cloudinary.com'], // Add your domain here
     },
+    experimental: {
+      serverComponentsExternalPackages: ['pdf2json'],
+    },
+    
   };
   
   module.exports = nextConfig;

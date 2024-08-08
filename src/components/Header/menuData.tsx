@@ -22,9 +22,12 @@ const menuData: Menu[] = [
   },
   {
     id: 4,
-    title: "Friends",
+    title: "Upload Assignment",
     path: "/friends",
     newTab: false,
   },
 ];
 export default menuData;
+
+
+
