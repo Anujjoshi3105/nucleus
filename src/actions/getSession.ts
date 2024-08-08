@@ -4,3 +4,5 @@ import { authOptions } from "@/utils/auth";
 export default async function getSession (){
     return await getServerSession(authOptions);
 }
+
+

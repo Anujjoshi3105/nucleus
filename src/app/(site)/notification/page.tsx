@@ -13,8 +13,8 @@ interface Notification {
   status: string;
   createdAt: string;
   acceptedAt?: string;
-
 }
+
 
 const NotificationPage = () => {
   const router = useRouter();

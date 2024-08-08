@@ -18,3 +18,4 @@ export async function POST(req: any) {
 
   return Response.json({ id: profile.user });
 }
+
