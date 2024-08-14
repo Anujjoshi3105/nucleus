@@ -11,7 +11,7 @@ import { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Nucleus",
   description:
-    "Free Next.js SaaS Boilerplate and Starter Kit designed and built for SaaS startups. It comes with all necessary integrations, pages, and components you need to launch a feature-rich SaaS websites.",
+    "Nucleus: An AI-powered platform for students to connect, collaborate, and automate college assignments while showcasing their tech achievements.",
 };
 
 export default function Home() {
