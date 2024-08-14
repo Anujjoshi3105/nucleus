@@ -90,17 +90,17 @@ const Header = () => {
                 {pathUrl !== "/" ? (
                   <>
                     <Image
-                      src={`/images/logo/logo.svg`}
+                      src={`/images/nucleus-white.png`}
                       alt="logo"
-                      width={240}
-                      height={30}
+                      width={160}
+                      height={20}
                       className="header-logo w-full dark:hidden"
                     />
                     <Image
-                      src={`/images/logo/logo-white.svg`}
+                      src={`/images/nucleus-white.png`}
                       alt="logo"
-                      width={240}
-                      height={30}
+                      width={160}
+                      height={20}
                       className="header-logo hidden w-full dark:block"
                     />
                   </>
@@ -109,19 +109,19 @@ const Header = () => {
                     <Image
                       src={`${
                         sticky
-                          ? "/images/logo/logo.svg"
-                          : "/images/logo/logo-white.svg"
+                          ? "/images/nucleus-black.png"
+                          : "/images/nucleus-white.png"
                       }`}
                       alt="logo"
-                      width={140}
-                      height={30}
+                      width={100}
+                      height={20}
                       className="header-logo w-full dark:hidden"
                     />
                     <Image
-                      src={"/images/logo/logo-white.svg"}
+                      src={"/images/nucleus-white.png"}
                       alt="logo"
-                      width={140}
-                      height={30}
+                      width={100}
+                      height={20}
                       className="header-logo hidden w-full dark:block"
                     />
                   </>

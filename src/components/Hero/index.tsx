@@ -32,7 +32,7 @@ const Hero = () => {
                   </li>
                   <li>
                     <Link
-                      href="https://github.com/nextjsTemplates/play-nextjs"
+                      href="https://github.com/nucleus-dev-01/nucleus"
                       target="_blank"
                       className="flex items-center gap-4 rounded-md bg-white/[0.12] px-6 py-[14px] text-base font-medium text-white transition duration-300 ease-in-out hover:bg-white hover:text-dark"
                     >
