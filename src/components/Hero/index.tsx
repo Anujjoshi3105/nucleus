@@ -19,11 +19,7 @@ const Hero = () => {
                 Where geeks go pro.
                 </h1>
                 <p className="mx-auto mb-9 max-w-[600px] text-base font-medium text-white sm:text-lg sm:leading-[1.44]">
-                  A small paragraph about Nucleus. Lorem ipsum dolor sit amet
-                  consectetur, adipisicing elit. Sequi iure exercitationem sunt
-                  quas ab minus quisquam molestiae distinctio deleniti eligendi
-                  dolorum quo repellat, saepe adipisci magnam deserunt eos
-                  possimus maxime facilis hic at corrupti inventore!
+                Join forces with fellow geeks, show off your projects, and breeze through assignments with AI help. Your profile’s lit, your projects pop, and your assignments are a breeze!
                 </p>
                 <ul className="mb-10 flex flex-wrap items-center justify-center gap-5">
                   <li>
